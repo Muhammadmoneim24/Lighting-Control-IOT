@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8" />
+    <title>JavaScript</title>
+    <style>
+        #mybtn {
+            width: 100px;
+            height: 80px;
+            color:white;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        <button id="mybtn">
+            Click!
+        </button>
+    </div>
+
+    <script>
+        //var HOST = "ws://localhost:3000";
+        var HOST = location.origin.replace(/^http/, 'ws');
+		var ws = new WebSocket(HOST); 
+		
+        var button = document.getElementById("mybtn");
+        button.onclick=  function () {
+            if (this.style.backgroundColor == "red"){
+           
+                ws.send("on");
+               
+			}
+            else {
+				ws.send("off");
+            }	
+        }    
+
+		ws.onmessage = function(event){
+            var msg = event.data;
+            if (msg == "on"){
+                button.style.backgroundColor="green";
+            }
+            else{
+                button.style.backgroundColor="red";
+            }
+		}
+       
+    </script>
+</body>
+
+</html>

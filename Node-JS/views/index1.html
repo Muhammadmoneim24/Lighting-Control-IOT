@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>RGB Customize</title>
+    <style>
+        .Row{
+            display: block;
+            height: 40px;
+            width: 600px;
+            padding: 10px;
+            margin: 5px;
+
+            border-radius: 10px;
+        }
+
+        .range{
+            width: 300px;
+            height: 10px;
+            accent-color: #6fff47;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+<h3> Control LED Brightness </h3>
+<span class="Row">
+    <p> 
+        <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+        0 <input id="val" class="range" type="range" min="0" max="255" value="60" step="1" > 255
+    <span>value = <span id="valTxt"></span> </span>
+    </p>
+</span>
+<h1 style="padding-left: 100px "> </h1>
+
+    <script>
+
+       // const HOST = location.origin.replace(/^http/, 'ws');
+        const ws = new WebSocket("ws://192.168.1.5:2024");
+
+        let rangeVal = document.getElementById("val");
+        let rangeTxt = document.getElementById("valTxt");
+
+         rangeTxt.innerHTML=rangeVal.value;
+
+        rangeVal.oninput = function () {
+            rangeTxt.innerHTML=rangeVal.value;
+            ws.send(this.value);
+        }
+        
+		ws.onmessage = function(event){
+
+            let msg = event.data;
+            console.log(msg);
+            rangeTxt.innerHTML=msg;
+            val.value=msg;
+		}
+
+		ws.onopen = function(){
+			console.log("Connected to server");
+          
+        }
+        ws.onclose = function(){
+			console.log("Disconnected from server!");
+		}
+
+    </script>
+</body>
+
+</html>
